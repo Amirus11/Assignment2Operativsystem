@@ -19,6 +19,10 @@ public class Process {
     return burstTime;
   }
 
+  public int getRemaingBurstTime() {
+    return remainingBurst;
+  }
+
   public int getWaiting() {
     return waitingTime;
   }
@@ -38,5 +42,4 @@ public class Process {
   public Boolean isDone() {
     return remainingBurst == 0;
   }
-
 }

@@ -1,61 +1,105 @@
-
-import java.util.stream.Collectors;
-
-void test(List<Job> jobs, Scheduler scheduler) {
-
-  var processes = jobs.stream()
-      .collect(Collectors.groupingBy(Job::arrivalTime, Collectors.mapping(Job::process, Collectors.toList())));
-  var time = 0;
-
-  // Adding processes with arrival = 0 and running first tick
-  for (Process p : processes.get(0)) {
-    scheduler.addProcess(p);
-  }
-  scheduler.tick();
-  time++;
-
-  while (!scheduler.isDone()) {
-    // adding proccesses to the scheduler that arrives at current time instant
-    var ps = processes.get(time);
-    if (ps != null) {
-      for (Process p : ps) {
-        scheduler.addProcess(p);
-      }
-    }
-
-    // scheduler runs a given process for a burst time of 1
-    scheduler.tick();
-    time++;
-  }
-
-  for (Job job : jobs) {
-
-    IO.println("Completion time for: " + job.process().getName() + " was " + (job.process().getTurnAroundTime()
-        + job.arrivalTime()));
-    IO.println("Waiting time for: " + job.process().getName() + " was " + job.process().getWaiting());
-    IO.println("Turnaround time for: " + job.process().getName() + " was " + job.process().getTurnAroundTime());
-    IO.println("-".repeat(50));
-  }
-  IO.println("Average Waiting Time: " + jobs.stream().mapToInt(j -> j.process().getWaiting()).average().getAsDouble());
-  IO.println("Average Turnaround Time: "
-      + jobs.stream().mapToInt(j -> j.process().getTurnAroundTime()).average().getAsDouble());
+List<Job> getJobsCase1() {
+  return List.of(
+      new Job(0, new Process("p1", 8)),
+      new Job(0, new Process("p2", 4)),
+      new Job(0, new Process("p3", 2)),
+      new Job(0, new Process("p4", 6)),
+      new Job(0, new Process("p5", 3)));
 }
 
-private static final List<Job> jobsCase1 = List.of(
-    new Job(0, new Process("p1", 8)),
-    new Job(0, new Process("p2", 4)),
-    new Job(0, new Process("p3", 2)),
-    new Job(0, new Process("p4", 6)),
-    new Job(0, new Process("p5", 3)));
+List<Job> getJobsCase2() {
+  return List.of(
+      new Job(0, new Process("p1", 20)),
+      new Job(1, new Process("p2", 2)),
+      new Job(2, new Process("p3", 2)),
+      new Job(3, new Process("p4", 1)),
+      new Job(4, new Process("p5", 3)));
+}
 
-private Scheduler schedulerFCFS = new FirstComeFirstServe();
+List<Job> getJobsCase3() {
+  return List.of(
+      new Job(0, new Process("p1", 20)),
+      new Job(1, new Process("p2", 2)),
+      new Job(2, new Process("p3", 2)),
+      new Job(3, new Process("p4", 2)),
+      new Job(4, new Process("p5", 2)),
+      new Job(5, new Process("p6", 2)));
+}
+
+private static final String blue = "\u001B[34m";
+private static final String reset = "\u001B[0m";
 
 void testFirstComeFirstServeCase1() {
-  IO.println("Running test First Come First Serve case 1: ");
-  test(jobsCase1, schedulerFCFS);
+  IO.println(blue + "Running test First Come First Serve case 1: " + reset);
+  var s = new Simulation(getJobsCase1(), new FirstComeFirstServe());
+  s.run();
+  IO.println("=".repeat(50));
+}
+
+void testFirstComeFirstServeCase2() {
+  IO.println(blue + "Running test First Come First Serve case 2: " + reset);
+  var s = new Simulation(getJobsCase2(), new FirstComeFirstServe());
+  s.run();
+  IO.println("=".repeat(50));
+}
+
+void testFirstComeFirstServeCase3() {
+  IO.println(blue + "Running test First Come First Serve case 3: " + reset);
+  var s = new Simulation(getJobsCase3(), new FirstComeFirstServe());
+  s.run();
+  IO.println("=".repeat(50));
+}
+
+private void testShortestJobFirstCase1() {
+  IO.println(blue + "Running test Shortest Job First case 1: " + reset);
+  var s = new Simulation(getJobsCase1(), new ShortestJobFirst());
+  s.run();
+  IO.println("=".repeat(50));
+}
+
+private void testShortestJobFirstCase2() {
+  IO.println(blue + "Running test Shortest Job First case 2: " + reset);
+  var s = new Simulation(getJobsCase2(), new ShortestJobFirst());
+  s.run();
+  IO.println("=".repeat(50));
+}
+
+private void testShortestJobFirstCase3() {
+  IO.println(blue + "Running test Shortest Job First case 3: " + reset);
+  var s = new Simulation(getJobsCase3(), new ShortestJobFirst());
+  s.run();
+  IO.println("=".repeat(50));
+}
+
+private void testShortestRemainingTimeFirstCase1() {
+  IO.println(blue + "Running test Shortest Remaining Time First case 1: " + reset);
+  var s = new Simulation(getJobsCase1(), new ShortestRemainingTimeFirst());
+  s.run();
+  IO.println("=".repeat(50));
+}
+
+private void testShortestRemainingTimeFirstCase2() {
+  IO.println(blue + "Running test Shortest Remaining Time First case 2: " + reset);
+  var s = new Simulation(getJobsCase2(), new ShortestRemainingTimeFirst());
+  s.run();
+  IO.println("=".repeat(50));
+}
+
+private void testShortestRemainingTimeFirstCase3() {
+  IO.println(blue + "Running test Shortest Remaining Time First case 3: " + reset);
+  var s = new Simulation(getJobsCase3(), new ShortestRemainingTimeFirst());
+  s.run();
   IO.println("=".repeat(50));
 }
 
 void main() {
   testFirstComeFirstServeCase1();
+  testFirstComeFirstServeCase2();
+  testFirstComeFirstServeCase3();
+  testShortestJobFirstCase1();
+  testShortestJobFirstCase2();
+  testShortestJobFirstCase3();
+  testShortestRemainingTimeFirstCase1();
+  testShortestRemainingTimeFirstCase2();
+  testShortestRemainingTimeFirstCase3();
 }
