@@ -1,8 +1,7 @@
-
 public class Process {
 
   private String name;
-  private int burstTime;
+  private final int burstTime;
   private int waitingTime;
   private int remainingBurst;
 
@@ -27,4 +26,15 @@ public class Process {
     return waitingTime + burstTime;
   }
 
+  public void tickRun() {
+    remainingBurst--;
+  }
+
+  public void tickWait() {
+    waitingTime++;
+  }
+
+  public Boolean isDone() {
+    return remainingBurst == 0;
+  }
 }

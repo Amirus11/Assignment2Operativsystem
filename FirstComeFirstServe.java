@@ -1,24 +1,9 @@
-import java.util.ArrayList;
-import java.util.List;
 
-public class FirstComeFirstServe {
+public class FirstComeFirstServe extends Scheduler {
 
-  private List<Process> processes;
-  private int time;
-
-  public FirstComeFirstServe() {
-    this.processes = new ArrayList<>();
-  }
-
-  public void addProcess(Process process) {
-    processes.add(process);
-  }
-
+  @Override
   public void tick() {
-    time++;
-  }
-
-  public boolean isDone() {
-    return false;
+    var processes = super.getProcesses();
+    processes.tickProcess(0);
   }
 }
