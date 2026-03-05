@@ -19,14 +19,15 @@ public class ProcessList {
   public void tickProcess(int i) {
     var p = this.processes.get(i);
     p.tickRun();
-    if (p.isDone()) {
-      this.processes.remove(i);
-    }
+
     for (int j = i - 1; j >= 0; j--) {
-      p.tickWait();
+      this.processes.get(j).tickWait();
     }
     for (int j = i + 1; j < this.processes.size(); j++) {
-      p.tickWait();
+      this.processes.get(j).tickWait();
+    }
+    if (p.isDone()) {
+      this.processes.remove(i);
     }
   }
 }

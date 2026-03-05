@@ -8,6 +8,7 @@ public class Process {
   public Process(String name, int burstTime) {
     this.name = name;
     this.burstTime = this.remainingBurst = burstTime;
+    this.waitingTime = 0;
   }
 
   public String getName() {
@@ -37,4 +38,5 @@ public class Process {
   public Boolean isDone() {
     return remainingBurst == 0;
   }
+
 }
