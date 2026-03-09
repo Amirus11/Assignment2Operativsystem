@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.function.Function;
 
 public class Test {
     List<Job> getJobsCase1() {
@@ -29,131 +30,69 @@ public class Test {
                 new Job(5, new Process("p6", 2)));
     }
 
-    private StringBuilder sb1 = new StringBuilder();
-    private StringBuilder sb2 = new StringBuilder();
-    private StringBuilder sb3 = new StringBuilder();
     private static final String blue = "\u001B[34m";
     private static final String reset = "\u001B[0m";
-    private Simulation sim;
 
-    void testFirstComeFirstServeCase1(boolean compTable) {
-        var s = new Simulation(getJobsCase1(), new FirstComeFirstServe());
-        this.sim = s;
-        if (compTable) {
-            s.runTableComps();
-        } else {
-            IO.println(blue + "Running test First Come First Serve case 1: " + reset);
-            s.run();
-            IO.println("=".repeat(50));
+    private Simulation[] simFCFS = {
+            new Simulation(getJobsCase1(), new FirstComeFirstServe()),
+            new Simulation(getJobsCase2(), new FirstComeFirstServe()),
+            new Simulation(getJobsCase3(), new FirstComeFirstServe()) };
+
+    private Simulation[] simSJF = {
+            new Simulation(getJobsCase1(), new ShortestJobFirst()),
+            new Simulation(getJobsCase2(), new ShortestJobFirst()),
+            new Simulation(getJobsCase3(), new ShortestJobFirst()) };
+
+    private Simulation[] simSRTF = {
+            new Simulation(getJobsCase1(), new ShortestRemainingTimeFirst()),
+            new Simulation(getJobsCase2(), new ShortestRemainingTimeFirst()),
+            new Simulation(getJobsCase3(), new ShortestRemainingTimeFirst()) };
+
+    void testFCFS(boolean print) {
+        for (int i = 0; i < simFCFS.length; i++) {
+            if (print) {
+                IO.println(blue + "Running test First Come First Serve case " + (i + 1) + ": " + reset);
+                simFCFS[i].run(true);
+                IO.println("=".repeat(50));
+            } else {
+                simFCFS[i].run(false);
+            }
+
         }
     }
 
-    void testFirstComeFirstServeCase2(boolean compTable) {
-        var s = new Simulation(getJobsCase2(), new FirstComeFirstServe());
-        this.sim = s;
-        if (compTable) {
-            s.runTableComps();
-        } else {
-            IO.println(blue + "Running test First Come First Serve case 2: " + reset);
-            s.run();
-            IO.println("=".repeat(50));
+    void testSJF(boolean print) {
+        for (int i = 0; i < simSJF.length; i++) {
+            if (print) {
+                IO.println(blue + "Running test Shortest Job First " + (i + 1) + ": " + reset);
+                simSJF[i].run(true);
+                IO.println("=".repeat(50));
+            } else {
+                simSJF[i].run(false);
+            }
         }
     }
 
-    void testFirstComeFirstServeCase3(boolean compTable) {
-        var s = new Simulation(getJobsCase3(), new FirstComeFirstServe());
-        this.sim = s;
-        if (compTable) {
-            s.runTableComps();
-        } else {
-            IO.println(blue + "Running test First Come First Serve case 3: " + reset);
-            s.run();
-            IO.println("=".repeat(50));
+    void testSRTF(boolean print) {
+        for (int i = 0; i < simSRTF.length; i++) {
+            if (print) {
+                IO.println(blue + "Running test Shortest Remaining Time First " + (i + 1) + ": " + reset);
+                simSRTF[i].run(true);
+                IO.println("=".repeat(50));
+            } else {
+                simSRTF[i].run(false);
+            }
         }
     }
 
-    private void testShortestJobFirstCase1(boolean compTable) {
-        var s = new Simulation(getJobsCase1(), new ShortestJobFirst());
-        this.sim = s;
-        if (compTable) {
-            s.runTableComps();
-        } else {
-            IO.println(blue + "Running test Shortest Job First case 1: " + reset);
-            s.run();
-            IO.println("=".repeat(50));
+    void main(boolean printStats, boolean printTable) {
+        testFCFS(printStats);
+        testSJF(printStats);
+        testSRTF(printStats);
+        if (printTable) {
+            printCompTable("Average waiting time", Simulation::getAverageWT);
+            printCompTable("Average turnaround time", Simulation::getAverageTT);
         }
-    }
-
-    private void testShortestJobFirstCase2(boolean compTable) {
-        var s = new Simulation(getJobsCase2(), new ShortestJobFirst());
-        this.sim = s;
-        if (compTable) {
-            s.runTableComps();
-        } else {
-            IO.println(blue + "Running test Shortest Job First case 2: " + reset);
-            s.run();
-            IO.println("=".repeat(50));
-        }
-    }
-
-    private void testShortestJobFirstCase3(boolean compTable) {
-        var s = new Simulation(getJobsCase3(), new ShortestJobFirst());
-        this.sim = s;
-        if (compTable) {
-            s.runTableComps();
-        } else {
-            IO.println(blue + "Running test Shortest Job First case 3: " + reset);
-            s.run();
-            IO.println("=".repeat(50));
-        }
-    }
-
-    private void testShortestRemainingTimeFirstCase1(boolean compTable) {
-        var s = new Simulation(getJobsCase1(), new ShortestRemainingTimeFirst());
-        this.sim = s;
-        if (compTable) {
-            s.runTableComps();
-        } else {
-            IO.println(blue + "Running test Shortest Remaining Time First case 1: " + reset);
-            s.run();
-            IO.println("=".repeat(50));
-        }
-    }
-
-    private void testShortestRemainingTimeFirstCase2(boolean compTable) {
-        var s = new Simulation(getJobsCase2(), new ShortestRemainingTimeFirst());
-        this.sim = s;
-        if (compTable) {
-            s.runTableComps();
-        } else {
-            IO.println(blue + "Running test Shortest Remaining Time First case 2: " + reset);
-            s.run();
-            IO.println("=".repeat(50));
-        }
-    }
-
-    private void testShortestRemainingTimeFirstCase3(boolean compTable) {
-        var s = new Simulation(getJobsCase3(), new ShortestRemainingTimeFirst());
-        this.sim = s;
-        if (compTable) {
-            s.runTableComps();
-        } else {
-            IO.println(blue + "Running test Shortest Remaining Time First case 3: " + reset);
-            s.run();
-            IO.println("=".repeat(50));
-        }
-    }
-
-    void main() {
-        testFirstComeFirstServeCase1(false);
-        testFirstComeFirstServeCase2(false);
-        testFirstComeFirstServeCase3(false);
-        testShortestJobFirstCase1(false);
-        testShortestJobFirstCase2(false);
-        testShortestJobFirstCase3(false);
-        testShortestRemainingTimeFirstCase1(false);
-        testShortestRemainingTimeFirstCase2(false);
-        testShortestRemainingTimeFirstCase3(false);
     }
 
     void moveCursor(int row, int column) {
@@ -166,77 +105,24 @@ public class Test {
         IO.print(mc);
     }
 
-    void main2() {
-        printWaitingTimeCompTable();
-        printAverageTurnaroundTime();
-    }
-
-    void printWaitingTimeCompTable() {
-        sb1.append(blue + "============" + "Average waiting Time" + "============" + reset + "\n");
+    void printCompTable(String title, Function<Simulation, Double> func) {
+        StringBuilder sb1 = new StringBuilder();
+        sb1.append(blue + "============" + title + "============" + reset + "\n");
         sb1.append("Cases | FCFS | SJF  | SRTF | \n");
-        sb1.append("1     | ");
         IO.print(sb1);
-        testFirstComeFirstServeCase1(true);
-        IO.print(sim.getAverageWT());
-        testShortestJobFirstCase1(true);
-        moveCursorToCol(14);
-        IO.print("| " + sim.getAverageWT());
-        testShortestRemainingTimeFirstCase1(true);
-        moveCursorToCol(21);
-        IO.print("| " + sim.getAverageWT() + "  |");
-        IO.println();
-        IO.print("2     | ");
-        testFirstComeFirstServeCase2(true);
-        IO.print(sim.getAverageWT());
-        testShortestJobFirstCase2(true);
-        moveCursorToCol(14);
-        IO.print("| " + sim.getAverageWT());
-        testShortestRemainingTimeFirstCase2(true);
-        moveCursorToCol(21);
-        IO.print("| " + sim.getAverageWT() + "  |");
-        IO.println();
-        IO.print("3     | ");
-        testFirstComeFirstServeCase3(true);
-        IO.print(sim.getAverageWT());
-        testShortestJobFirstCase3(true);
-        moveCursorToCol(14);
-        IO.print("| " + sim.getAverageWT());
-        testShortestRemainingTimeFirstCase3(true);
-        moveCursorToCol(21);
-        IO.print("| " + sim.getAverageWT() + "  |");
-        IO.println();
-    }
+        for (int i = 0; i < 3; i++) {
+            moveCursorToCol(1);
+            IO.print(i + "     | ");
+            moveCursorToCol(9);
+            IO.print(func.apply(simFCFS[i]));
+            moveCursorToCol(14);
+            IO.print("| " + func.apply(simSJF[i]));
+            moveCursorToCol(21);
+            IO.print("| " + func.apply(simSRTF[i]));
+            moveCursorToCol(28);
+            IO.println("|");
 
-    void printAverageTurnaroundTime() {
-        IO.print(sb1);
-        testFirstComeFirstServeCase1(true);
-        IO.print(sim.getAverageTT());
-        testShortestJobFirstCase1(true);
-        moveCursorToCol(14);
-        IO.print("| " + sim.getAverageTT());
-        testShortestRemainingTimeFirstCase1(true);
-        moveCursorToCol(21);
-        IO.print("| " + sim.getAverageTT() + " |");
-        IO.println();
-        IO.print("2     | ");
-        testFirstComeFirstServeCase2(true);
-        IO.print(sim.getAverageTT());
-        testShortestJobFirstCase2(true);
-        moveCursorToCol(14);
-        IO.print("| " + sim.getAverageTT());
-        testShortestRemainingTimeFirstCase2(true);
-        moveCursorToCol(21);
-        IO.print("| " + sim.getAverageTT() + "  |");
-        IO.println();
-        IO.print("3     | ");
-        testFirstComeFirstServeCase3(true);
-        IO.print(sim.getAverageTT());
-        testShortestJobFirstCase3(true);
-        moveCursorToCol(14);
-        IO.print("| " + sim.getAverageTT());
-        testShortestRemainingTimeFirstCase3(true);
-        moveCursorToCol(21);
-        IO.print("| " + sim.getAverageTT() + "  |");
+        }
         IO.println();
     }
 }

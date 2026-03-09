@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 public class Simulation {
     List<Job> jobs;
+
     double averageWT;
     double averageTT;
 
@@ -15,59 +16,7 @@ public class Simulation {
         this.scheduler = scheduler;
     }
 
-    public void run() {
-        var processes = jobs.stream()
-                .collect(
-                        Collectors.groupingBy(
-                                Job::arrivalTime, Collectors.mapping(Job::process, Collectors.toList())));
-        var time = 0;
-
-        // Adding processes with arrival = 0 and running first tick
-        for (Process p : processes.get(0)) {
-            scheduler.addProcess(p);
-        }
-        scheduler.tick();
-        time++;
-
-        while (!scheduler.isDone()) {
-            // adding proccesses to the scheduler that arrives at current time instant
-            var ps = processes.get(time);
-            if (ps != null) {
-                for (Process p : ps) {
-                    scheduler.addProcess(p);
-                }
-            }
-
-            // scheduler runs a given process for a burst time of 1
-            scheduler.tick();
-            time++;
-        }
-
-        IO.println();
-        for (Job job : jobs) {
-            IO.println(
-                    "Completion time for: "
-                            + job.process().getName()
-                            + " was "
-                            + (job.process().getTurnAroundTime() + job.arrivalTime()));
-            IO.println(
-                    "Waiting time for: " + job.process().getName() + " was " + job.process().getWaiting());
-            IO.println(
-                    "Turnaround time for: "
-                            + job.process().getName()
-                            + " was "
-                            + job.process().getTurnAroundTime());
-            IO.println("-".repeat(50));
-        }
-        IO.println(
-                "Average Waiting Time: "
-                        + jobs.stream().mapToInt(j -> j.process().getWaiting()).average().getAsDouble());
-        IO.println(
-                "Average Turnaround Time: "
-                        + jobs.stream().mapToInt(j -> j.process().getTurnAroundTime()).average().getAsDouble());
-    }
-
-    public void runTableComps() {
+    public void run(boolean print) {
         var processes = jobs.stream()
                 .collect(
                         Collectors.groupingBy(
@@ -98,6 +47,30 @@ public class Simulation {
         this.averageWT = jobs.stream().mapToInt(j -> j.process().getWaiting()).average().getAsDouble();
         this.averageTT = jobs.stream().mapToInt(j -> j.process().getTurnAroundTime()).average().getAsDouble();
 
+        if (print) {
+            IO.println();
+            for (Job job : jobs) {
+                IO.println(
+                        "Completion time for: "
+                                + job.process().getName()
+                                + " was "
+                                + (job.process().getTurnAroundTime() + job.arrivalTime()));
+                IO.println(
+                        "Waiting time for: " + job.process().getName() + " was " + job.process().getWaiting());
+                IO.println(
+                        "Turnaround time for: "
+                                + job.process().getName()
+                                + " was "
+                                + job.process().getTurnAroundTime());
+                IO.println("-".repeat(50));
+            }
+            IO.println(
+                    "Average Waiting Time: "
+                            + averageWT);
+            IO.println(
+                    "Average Turnaround Time: "
+                            + averageTT);
+        }
     }
 
     public double getAverageWT() {
