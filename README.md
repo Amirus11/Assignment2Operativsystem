@@ -4,8 +4,8 @@
 - Java 25+
 
 ## Running
-All tests with test cases is defined in `Test.java`
+All tests with test cases is defined in `Main.java`
 ```bash
-java Test.java
+java Main.java
 ```
 
