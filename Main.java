@@ -1,10 +1,10 @@
 
 public class Main {
 
-    static Test test = new Test();
+  static Test test = new Test();
 
-    public static void main(String[] args) {
-        test.main(false, true);
-    }
+  public static void main(String[] args) {
+    test.main(true, true);
+  }
 
 }
