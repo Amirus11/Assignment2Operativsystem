@@ -1,15 +1,18 @@
+/**
+ * This class represents a single process with the provided name and burst time and includes methods
+ * to execute it or make it wait.
+ */
 public class Process {
-
   private String name;
   private final int burstTime;
   private int waitingTime;
   private int remainingBurst;
 
-  /*
-   * This is the constructor for the process class
+  /**
+   * Creates a new Process with the given name and burst time. The waiting time is initialized to 0
+   * and the remaining burst time is set to the burst time.
    *
    * @param name the name of the process
-   * 
    * @param burstTime the burst time of the process
    */
   public Process(String name, int burstTime) {
@@ -18,59 +21,57 @@ public class Process {
     this.waitingTime = 0;
   }
 
-  /*
-   * This method is responsible for returning the name of the process
+  /**
+   * Returns the name of the process.
+   *
+   * @return the name of the process.
    */
   public String getName() {
     return name;
   }
 
-  /*
-   * The method is responsibe for returning the burst time
-   */
-  public int getBurstTime() {
-    return burstTime;
-  }
-
-  /*
-   * This method is responsible for returning the remaining burst time for a
-   * process
+  /**
+   * Returns the remaining burst time of the process.
+   *
+   * @return the remaining burst time of the process
    */
   public int getRemaingBurstTime() {
     return remainingBurst;
   }
 
-  /*
-   * This method is responsible for returning the waiting time
+  /**
+   * Returns the waiting time of the process.
+   *
+   * @return the waiting time of the process
    */
   public int getWaiting() {
     return waitingTime;
   }
 
-  /*
-   * This method is responsible for returning the turnaround time
+  /**
+   * Returns the turnaround time of the process, which is the sum of the waiting time and the burst
+   * time.
+   *
+   * @return the turnaround time of the process
    */
   public int getTurnAroundTime() {
     return waitingTime + burstTime;
   }
 
-  /*
-   * The method is Responsible for lowering the remaining burst time each tick
-   */
+  /** Ticks the process by decrementing the remaining burst time by 1. */
   public void tickRun() {
     remainingBurst--;
   }
 
-  /*
-   * This method is reponsible for increasing the waitingtime each tick
-   */
+  /** Ticks the process by incrementing the waiting time by 1. */
   public void tickWait() {
     waitingTime++;
   }
 
-  /*
-   * This method is responsible for setting the remaining bursttime to zero when
-   * the process is isDone
+  /**
+   * Returns whether or not the process is done, meaning that its remaining burst time is 0.
+   *
+   * @return {@code true} if the process is done, and {@code false} otherwise
    */
   public Boolean isDone() {
     return remainingBurst == 0;

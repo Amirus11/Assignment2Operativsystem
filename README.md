@@ -1,10 +1,10 @@
-# Assignment2Operativsystem
+# Assignment 2 Operativsystem
 
 ## Prerequisites
 - Java 25+
 
 ## Running
-All tests with test cases is defined in `Main.java`
+The entry point of the application is `Main.java`.
 ```bash
 java Main.java
 ```
